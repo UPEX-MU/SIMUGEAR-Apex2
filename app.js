@@ -2,6 +2,12 @@ import { Avr109, PAGE_SIZE, parseHex } from "./avr109.js";
 
 const FIRMWARE_SHA256 = "DB4FA52BC11DBEC000C119A7C5BEFEDE791DCB9F607A9DB1433AF22591D3FF3D";
 const DEVICE = { usbVendorId: 0x358f, usbProductId: 0x288d };
+const NORMAL_PORT_FILTERS = [
+  DEVICE,
+  { usbVendorId: 0x356f, usbProductId: 0x285d },
+  { usbVendorId: 0x2341, usbProductId: 0x8036 },
+  { usbVendorId: 0x2a03, usbProductId: 0x8036 }
+];
 const $ = id => document.getElementById(id);
 let normalPort = null;
 let firmware = null;
@@ -40,14 +46,20 @@ $("connectBtn").addEventListener("click", async () => {
   busy = true;
   refreshControls();
   try {
-    const port = await navigator.serial.requestPort({ filters: [DEVICE] });
+    const port = await navigator.serial.requestPort({ filters: NORMAL_PORT_FILTERS });
     const info = port.getInfo();
-    if (info.usbVendorId !== DEVICE.usbVendorId || info.usbProductId !== DEVICE.usbProductId) throw new Error("Not a SIMUGEAR Apex2 device");
+    if (!NORMAL_PORT_FILTERS.some(filter => filter.usbVendorId === info.usbVendorId && filter.usbProductId === info.usbProductId)) throw new Error("Unsupported device USB identity");
+    const usbId = [info.usbVendorId, info.usbProductId].map(value => value.toString(16).padStart(4, "0").toUpperCase()).join(":");
+    const legacy = info.usbVendorId !== DEVICE.usbVendorId || info.usbProductId !== DEVICE.usbProductId;
+    if (legacy && !window.confirm("\u6240\u9009\u8bbe\u5907\u4f7f\u7528\u65e7\u7248 USB \u8eab\u4efd\uff08" + usbId + "\uff09\uff0c\u53ef\u80fd\u663e\u793a\u4e3a Arduino Leonardo \u6216 MU-PanelApex2\u3002\u8bf7\u901a\u8fc7\u62d4\u63d2\u786e\u8ba4\u8be5\u4e32\u53e3\u5c5e\u4e8e SIMUGEAR Apex2\uff0c\u800c\u4e0d\u662f\u5176\u4ed6\u5f00\u53d1\u677f\u3002\u662f\u5426\u7ee7\u7eed\uff1f")) {
+      log("\u5df2\u53d6\u6d88\u65e7\u7248\u8bbe\u5907\u9009\u62e9");
+      return;
+    }
     normalPort = port;
     bootReady = false;
-    $("deviceStatus").textContent = "SIMUGEAR Apex2 \u5df2\u9009\u62e9";
+    $("deviceStatus").textContent = `${legacy ? "\u65e7\u7248 USB \u8bbe\u5907" : "SIMUGEAR Apex2"} (${usbId}) \u5df2\u9009\u62e9`;
     progress(0, "\u8bbe\u5907\u5df2\u9009\u62e9");
-    log("SIMUGEAR Apex2 (358F:288D) \u5df2\u9009\u62e9");
+    log(`USB ${usbId} \u5df2\u9009\u62e9${legacy ? " / \u517c\u5bb9\u65e7\u7248\u8bbe\u5907" : ""}`);
   } catch (error) {
     log(errorMessage(error));
   } finally {

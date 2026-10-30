@@ -3,6 +3,7 @@
 Dedicated Web Serial firmware flasher for SIMUGEAR Apex2.
 
 - Device: ATmega32U4, AVR109 bootloader, USB VID `358F`, PID `288D`.
+- Initial port selection also supports legacy MU-PanelApex2 `356F:285D` and Arduino Leonardo `2341:8036` / `2A03:8036`. Legacy selection requires confirmation; USB identity alone does not prove which physical product is attached. Identify the target port by unplugging/replugging it. X1 and unrelated USB serial adapters are not included in these filters.
 - Source export: `01_ColorPalette.ino.arduino_leonardo.hex`, supplied 2026-10-30.
 - Firmware SHA-256: `DB4FA52BC11DBEC000C119A7C5BEFEDE791DCB9F607A9DB1433AF22591D3FF3D`.
 - The exported HEX is copied without modification. No firmware recompilation or source changes are included.
