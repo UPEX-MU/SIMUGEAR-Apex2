@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SIMUGEAR Apex2 firmware updater">
+  <meta name="theme-color" content="#151719">
+  <title>SIMUGEAR Apex2</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div><p class="brand">SIMUGEAR</p><h1>SIMUGEAR Apex2</h1></div>
+      <span id="supportStatus" role="status">&#26816;&#26597;&#27983;&#35272;&#22120;&#20013;</span>
+    </header>
+    <section class="firmware" aria-label="Firmware">
+      <div><span class="label">&#22266;&#20214;</span><strong>2026.10.30</strong></div>
+      <div><span class="label">&#35774;&#22791;</span><strong>SIMUGEAR Apex2</strong></div>
+      <div><span class="label">USB VID / PID</span><strong>358F / 288D</strong></div>
+      <div><span class="label">ATmega32U4</span><strong id="firmwareInfo">&#21152;&#36733;&#20013;</strong></div>
+    </section>
+    <p class="notice">&#20165;&#38480; SIMUGEAR Apex2 &#35774;&#22791;&#12290;&#21047;&#20889;&#21069;&#20851;&#38381; SimHub &#21450;&#20854;&#20182;&#20018;&#21475;&#36719;&#20214;&#65292;&#20889;&#20837;&#26399;&#38388;&#35831;&#21247;&#26029;&#24320; USB&#12290;</p>
+    <section class="workspace" aria-label="Firmware update">
+      <div class="actions">
+        <button id="connectBtn" type="button" disabled>1. &#36873;&#25321;&#35774;&#22791;</button>
+        <button id="bootBtn" type="button" disabled>2. &#36827;&#20837;&#21047;&#20889;&#27169;&#24335;</button>
+        <button id="bootSelectBtn" type="button" disabled>3. &#36873;&#25321;&#21047;&#20889;&#20018;&#21475;&#24182;&#20889;&#20837;</button>
+      </div>
+      <div class="progressTop"><span id="progressText" role="status">&#21152;&#36733;&#22266;&#20214;&#20013;</span><span id="progressPercent">0%</span></div>
+      <div id="progress" role="progressbar" aria-label="Firmware progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progressBar"></div></div>
+      <div class="recovery"><span id="deviceStatus">&#26410;&#36873;&#25321;&#35774;&#22791;</span><button id="recoveryBtn" type="button" disabled>&#24050;&#22788;&#20110; Bootloader / &#37325;&#35797;&#21047;&#20889;</button></div>
+    </section>
+    <section class="logs" aria-labelledby="logTitle">
+      <div class="logHeader"><h2 id="logTitle">&#21047;&#20889;&#26085;&#24535;</h2><button id="downloadLogBtn" class="plain" type="button">&#19979;&#36733;&#26085;&#24535;</button></div>
+      <pre id="log" aria-live="polite"></pre>
+    </section>
+    <footer>SIMUGEAR Apex2 <span>AVR109 / 57600 baud</span><a href="./firmware.hex" download="SIMUGEAR-Apex2-20261030.hex">&#19979;&#36733; HEX</a></footer>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
